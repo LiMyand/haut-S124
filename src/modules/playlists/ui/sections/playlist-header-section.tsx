@@ -40,12 +40,12 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: PlaylistHeaderSectionProp
   const utils = trpc.useUtils();
   const remove = trpc.playlists.remove.useMutation({
     onSuccess: () => {
-      toast.success("Playlist removed");
+      toast.success("收藏删除成功");
       utils.playlists.getMany.invalidate();
       router.push("/playlists");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("收藏删除失败");
     },
   });
 
@@ -53,7 +53,7 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: PlaylistHeaderSectionProp
     <div className="flex justify-between items-center">
       <div>
         <h1 className="text-2xl font-bold">{playlist.name}</h1>
-        <p className="text-xs text-muted-foreground">Videos from the playlist</p>
+        <p className="text-xs text-muted-foreground">收藏中的视频</p>
       </div>
       <Button
         variant="outline"

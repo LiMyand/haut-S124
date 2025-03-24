@@ -40,12 +40,12 @@ export const ThumbnailGenerateModal = ({
 
   const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
     onSuccess: () => {
-      toast.success("Background job started", { description: "This may take some time" });
+      toast.success("后台任务开始", { description: "这可能需要一些时间" });
       form.reset();
       onOpenChange(false);
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("后台任务失败");
     },
   });
 
@@ -57,7 +57,7 @@ export const ThumbnailGenerateModal = ({
   };
 
   return (
-    <ResponsiveModal title="Upload a thumbnail" open={open} onOpenChange={onOpenChange}>
+    <ResponsiveModal title="上传缩略图" open={open} onOpenChange={onOpenChange}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
@@ -65,14 +65,14 @@ export const ThumbnailGenerateModal = ({
             name="prompt"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Prompt</FormLabel>
+                <FormLabel>提示词</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     className="resize-none"
                     cols={30}
                     rows={5}
-                    placeholder="A description of wanted thumbnail"
+                    placeholder="描述想要的缩略图效果"
                   />
                 </FormControl>
                 <FormMessage />
@@ -81,7 +81,7 @@ export const ThumbnailGenerateModal = ({
           />
           <div className="flex justify-end">
             <Button disabled={generateThumbnail.isPending} type="submit">
-              Generate
+              生成
             </Button>
           </div>
         </form>

@@ -148,21 +148,21 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     onSuccess: () => {
       utils.studio.getMany.invalidate();
       utils.studio.getOne.invalidate({ id: videoId });
-      toast.success("Video updated");
+      toast.success("视频更新成功");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频更新失败");
     },
   });
 
   const remove = trpc.videos.remove.useMutation({
     onSuccess: () => {
       utils.studio.getMany.invalidate();
-      toast.success("Video removed");
+      toast.success("视频删除成功");
       router.push("/studio");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频删除失败");
     },
   });
 
@@ -170,27 +170,27 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     onSuccess: () => {
       utils.studio.getMany.invalidate();
       utils.studio.getOne.invalidate({ id: videoId });
-      toast.success("Video revalidated");
+      toast.success("视频重新验证成功");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频重新验证失败");
     },
   });
 
   const generateDescription = trpc.videos.generateDescription.useMutation({
     onSuccess: () => {
-      toast.success("Background job started", { description: "This may take some time" });
+      toast.success("后台任务开始", { description: "这可能需要一些时间" });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("后台任务失败");
     },
   });
   const generateTitle = trpc.videos.generateTitle.useMutation({
     onSuccess: () => {
-      toast.success("Background job started", { description: "This may take some time" });
+      toast.success("后台任务开始", { description: "这可能需要一些时间" });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("后台任务失败");
     },
   });
 
@@ -198,10 +198,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     onSuccess: () => {
       utils.studio.getMany.invalidate();
       utils.studio.getOne.invalidate({ id: videoId });
-      toast.success("Thumbnail restored");
+      toast.success("缩略图恢复成功");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("缩略图恢复失败");
     },
   });
 

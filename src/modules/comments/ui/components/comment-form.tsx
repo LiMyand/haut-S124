@@ -35,11 +35,11 @@ export const CommentForm = ({
       utils.comments.getMany.invalidate({ videoId });
       utils.comments.getMany.invalidate({ videoId, parentId });
       form.reset();
-      toast.success("Comment added");
+      toast.success("评论成功");
       onSuccess?.();
     },
     onError: (error) => {
-      toast.error("Something went wrong");
+      toast.error("评论失败");
 
       if (error.data?.code === "UNAUTHORIZED") {
         clerk.openSignIn();
@@ -82,9 +82,7 @@ export const CommentForm = ({
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder={
-                      variant === "reply" ? "Reply to this comment..." : "Add a comment..."
-                    }
+                    placeholder={variant === "reply" ? "回复评论..." : "添加评论..."}
                     className="resize-none bg-transparent overflow-hidden min-h-0"
                   />
                 </FormControl>
@@ -95,11 +93,11 @@ export const CommentForm = ({
           <div className="justify-end gap-2 mt-2 flex">
             {onCancel && (
               <Button variant="ghost" type="button" onClick={handleCancel}>
-                Cancel
+                取消
               </Button>
             )}
             <Button disabled={create.isPending} type="submit" size="sm">
-              {variant === "reply" ? "Reply" : "Comment"}
+              {variant === "reply" ? "回复" : "评论"}
             </Button>
           </div>
         </div>

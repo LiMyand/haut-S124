@@ -34,32 +34,32 @@ export const PlaylistAddModal = ({ open, onOpenChange, videoId }: PlaylistAddMod
 
   const addVideo = trpc.playlists.addVideo.useMutation({
     onSuccess: (data) => {
-      toast.success("Video added to playlist");
+      toast.success("视频添加到收藏成功");
       utils.playlists.getMany.invalidate();
       utils.playlists.getManyForVideo.invalidate({ videoId });
       utils.playlists.getOne.invalidate({ id: data.playlistId });
       utils.playlists.getVideos.invalidate({ playlistId: data.playlistId });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频添加到收藏失败");
     },
   });
 
   const removeVideo = trpc.playlists.removeVideo.useMutation({
     onSuccess: (data) => {
-      toast.success("Video removed from playlist");
+      toast.success("视频从收藏中移除成功");
       utils.playlists.getMany.invalidate();
       utils.playlists.getManyForVideo.invalidate({ videoId });
       utils.playlists.getOne.invalidate({ id: data.playlistId });
       utils.playlists.getVideos.invalidate({ playlistId: data.playlistId });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频从收藏中移除失败");
     },
   });
 
   return (
-    <ResponsiveModal title="Add to playlist" open={open} onOpenChange={onOpenChange}>
+    <ResponsiveModal title="添加到收藏" open={open} onOpenChange={onOpenChange}>
       <div className="flex flex-col gap-2">
         {isLoading && (
           <div className="flex justify-center p-4">

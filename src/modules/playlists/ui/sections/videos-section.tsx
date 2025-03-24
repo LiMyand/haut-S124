@@ -57,14 +57,14 @@ const VideosSectionSuspense = ({ playlistId }: VideosSectionProps) => {
 
   const removeVideo = trpc.playlists.removeVideo.useMutation({
     onSuccess: (data) => {
-      toast.success("Video removed from playlist");
+      toast.success("视频从收藏中移除成功");
       utils.playlists.getMany.invalidate();
       utils.playlists.getManyForVideo.invalidate({ videoId: data.videoId });
       utils.playlists.getOne.invalidate({ id: data.playlistId });
       utils.playlists.getVideos.invalidate({ playlistId: data.playlistId });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("视频从收藏中移除失败");
     },
   });
 

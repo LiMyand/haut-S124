@@ -42,13 +42,13 @@ const SubscriptionsSectionSuspense = () => {
 
   const unsubscribe = trpc.subscriptions.remove.useMutation({
     onSuccess: (data) => {
-      toast.success("Unsubscribed");
+      toast.success("取消订阅成功");
       utils.subscriptions.getMany.invalidate();
       utils.videos.getManySubscribed.invalidate();
       utils.users.getOne.invalidate({ id: data.creatorId });
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("取消订阅失败");
     },
   });
 

@@ -44,11 +44,11 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
 
   const remove = trpc.comments.remove.useMutation({
     onSuccess: () => {
-      toast.success("Comment deleted");
+      toast.success("评论删除成功");
       utils.comments.getMany.invalidate({ videoId: comment.videoId });
     },
     onError: (error) => {
-      toast.error("Something went wrong");
+      toast.error("评论删除失败");
 
       if (error.data?.code === "UNAUTHORIZED") {
         clerk.openSignIn();
@@ -61,7 +61,7 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
       utils.comments.getMany.invalidate({ videoId: comment.videoId });
     },
     onError: (error) => {
-      toast.error("Something went wrong");
+      toast.error("点赞失败");
 
       if (error.data?.code === "UNAUTHORIZED") {
         clerk.openSignIn();
@@ -73,7 +73,7 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
       utils.comments.getMany.invalidate({ videoId: comment.videoId });
     },
     onError: (error) => {
-      toast.error("Something went wrong");
+      toast.error("踩踩失败");
 
       if (error.data?.code === "UNAUTHORIZED") {
         clerk.openSignIn();
@@ -135,7 +135,7 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
                 className="h-8"
                 onClick={() => setIsReplyOpen(true)}
               >
-                Reply
+                回复
               </Button>
             )}
           </div>
@@ -149,12 +149,12 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
               <MessageSquareIcon className="size-4" />
-              Reply
+              回复
             </DropdownMenuItem>
             {comment.user.clerkId === userId && (
               <DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })}>
                 <Trash2Icon className="size-4" />
-                Delete
+                删除
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -182,7 +182,7 @@ export const CommentItem = ({ comment, variant = "comment" }: CommentItemProps) 
             onClick={() => setIsRepliesOpen((current) => !current)}
           >
             {isRepliesOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            {comment.replyCount} replies
+            {comment.replyCount} 回复
           </Button>
         </div>
       )}
