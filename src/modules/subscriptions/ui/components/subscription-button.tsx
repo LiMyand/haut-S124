@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SubscriptionButtonProps {
   onClick: ButtonProps["onClick"];
@@ -7,14 +7,14 @@ interface SubscriptionButtonProps {
   isSubscribed: boolean;
   className?: string;
   size?: ButtonProps["size"];
-};
+}
 
 export const SubscriptionButton = ({
   onClick,
   disabled,
   isSubscribed,
   className,
-  size
+  size,
 }: SubscriptionButtonProps) => {
   return (
     <Button
@@ -24,7 +24,7 @@ export const SubscriptionButton = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {isSubscribed ? "Unsubscribe" : "Subscribe"}
+      {isSubscribed ? "取消订阅" : "订阅"}
     </Button>
   );
 };
