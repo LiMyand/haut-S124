@@ -1,10 +1,10 @@
+import { useAuth, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
-import { useClerk, useAuth } from "@clerk/nextjs";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/user-avatar";
+import { cn } from "@/lib/utils";
 
 import { UserGetOneOutput } from "../../types";
 
@@ -48,9 +48,9 @@ export const UserPageInfo = ({ user }: UserPageInfoProps) => {
   const clerk = useClerk();
 
   const { isPending, onClick } = useSubscription({
-      userId: user.id,
-      isSubscribed: user.viewerSubscribed,
-    });
+    userId: user.id,
+    isSubscribed: user.viewerSubscribed,
+  });
 
   return (
     <div className="py-6">
@@ -71,19 +71,17 @@ export const UserPageInfo = ({ user }: UserPageInfoProps) => {
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold">{user.name}</h1>
             <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-              <span>{user.subscriberCount} subscribers</span>
+              <span>{user.subscriberCount} 订阅者</span>
               <span>&bull;</span>
-              <span>{user.videoCount} videos</span>
+              <span>{user.videoCount} 视频</span>
             </div>
           </div>
         </div>
         {userId === user.clerkId ? (
-          <Button
-            variant="secondary"
-            asChild
-            className="w-full mt-3 rounded-full"
-          >
-            <Link prefetch href="/studio">Go to studio</Link>
+          <Button variant="secondary" asChild className="w-full mt-3 rounded-full">
+            <Link prefetch href="/studio">
+              进入工作室
+            </Link>
           </Button>
         ) : (
           <SubscriptionButton
@@ -101,7 +99,10 @@ export const UserPageInfo = ({ user }: UserPageInfoProps) => {
           size="xl"
           imageUrl={user.imageUrl}
           name={user.name}
-          className={cn(userId === user.clerkId && "cursor-pointer hover:opacity-80 transition-opacity duration-300")}
+          className={cn(
+            userId === user.clerkId &&
+              "cursor-pointer hover:opacity-80 transition-opacity duration-300"
+          )}
           onClick={() => {
             if (user.clerkId === userId) {
               clerk.openUserProfile();
@@ -111,17 +112,15 @@ export const UserPageInfo = ({ user }: UserPageInfoProps) => {
         <div className="flex-1 min-w-0">
           <h1 className="text-4xl font-bold">{user.name}</h1>
           <div className="flex items-center gap-1 text-sm text-muted-foreground mt-3">
-            <span>{user.subscriberCount} subscribers</span>
+            <span>{user.subscriberCount} 订阅者</span>
             <span>&bull;</span>
-            <span>{user.videoCount} videos</span>
+            <span>{user.videoCount} 视频</span>
           </div>
           {userId === user.clerkId ? (
-            <Button
-              variant="secondary"
-              asChild
-              className="mt-3 rounded-full"
-            >
-              <Link prefetch href="/studio">Go to studio</Link>
+            <Button variant="secondary" asChild className="mt-3 rounded-full">
+              <Link prefetch href="/studio">
+                进入工作室
+              </Link>
             </Button>
           ) : (
             <SubscriptionButton

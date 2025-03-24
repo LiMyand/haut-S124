@@ -1,19 +1,19 @@
-import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 
-import { UserInfo } from "@/modules/users/ui/components/user-info";
 import { useSubscription } from "@/modules/subscriptions/hooks/use-subscription";
 import { SubscriptionButton } from "@/modules/subscriptions/ui/components/subscription-button";
+import { UserInfo } from "@/modules/users/ui/components/user-info";
 
 import { VideoGetOneOutput } from "../../types";
 
 interface VideoOwnerProps {
   user: VideoGetOneOutput["user"];
   videoId: string;
-};
+}
 
 export const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
   const { userId: clerkUserId, isLoaded } = useAuth();
@@ -31,19 +31,15 @@ export const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
           <div className="flex flex-col gap-1 min-w-0">
             <UserInfo size="lg" name={user.name} />
             <span className="text-sm text-muted-foreground line-clamp-1">
-              {user.subscriberCount} subscribers
+              {user.subscriberCount} 订阅者
             </span>
           </div>
         </div>
       </Link>
       {clerkUserId === user.clerkId ? (
-        <Button
-          variant="secondary"
-          className="rounded-full"
-          asChild
-        >
+        <Button variant="secondary" className="rounded-full" asChild>
           <Link prefetch href={`/studio/videos/${videoId}`}>
-            Edit video
+            编辑视频
           </Link>
         </Button>
       ) : (

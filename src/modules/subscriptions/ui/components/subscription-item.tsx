@@ -9,7 +9,7 @@ interface SubscriptionItemProps {
   subscriberCount: number;
   onUnsubscribe: () => void;
   disabled: boolean;
-};
+}
 
 export const SubscriptionItemSkeleton = () => {
   return (
@@ -39,20 +39,14 @@ export const SubscriptionItem = ({
 }: SubscriptionItemProps) => {
   return (
     <div className="flex items-start gap-4">
-      <UserAvatar
-        size="lg"
-        imageUrl={imageUrl}
-        name={name}
-      />
+      <UserAvatar size="lg" imageUrl={imageUrl} name={name} />
 
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm">
-              {name}
-            </h3>
+            <h3 className="text-sm">{name}</h3>
             <p className="text-xs text-muted-foreground">
-              {subscriberCount.toLocaleString()} subscribers
+              {subscriberCount.toLocaleString()} 订阅者
             </p>
           </div>
 

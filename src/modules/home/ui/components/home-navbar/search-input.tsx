@@ -1,12 +1,12 @@
 "use client";
 
-import { Suspense, useState } from "react";
 import { SearchIcon, XIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 
-import { APP_URL } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { APP_URL } from "@/constants";
 
 export const SearchInput = () => {
   return (
@@ -19,7 +19,7 @@ export const SearchInput = () => {
 const SearchInputSuspense = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const query = searchParams.get("query") || "";
   const categoryId = searchParams.get("categoryId") || "";
 
@@ -43,7 +43,7 @@ const SearchInputSuspense = () => {
 
     setValue(newQuery);
     router.push(url.toString());
-  }
+  };
 
   return (
     <form className="flex w-full max-w-[600px]" onSubmit={handleSearch}>
@@ -52,7 +52,7 @@ const SearchInputSuspense = () => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           type="text"
-          placeholder="Search"
+          placeholder="搜索"
           className="w-full pl-4 py-2 pr-12 rounded-l-full border focus:outline-none focus:border-blue-500"
         />
         {value && (

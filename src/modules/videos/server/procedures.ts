@@ -484,7 +484,7 @@ export const videosRouter = createTRPCRouter({
       .insert(videos)
       .values({
         userId,
-        title: "Untitled",
+        title: "暂无标题",
         muxStatus: "waiting",
         muxUploadId: upload.id,
       })
