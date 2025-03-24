@@ -1,5 +1,5 @@
+import { serve } from "@upstash/workflow/nextjs";
 import { and, eq } from "drizzle-orm";
-import { serve } from "@upstash/workflow/nextjs"
 
 import { db } from "@/db";
 import { videos } from "@/db/schema";
@@ -7,7 +7,7 @@ import { videos } from "@/db/schema";
 interface InputType {
   userId: string;
   videoId: string;
-};
+}
 
 const TITLE_SYSTEM_PROMPT = `Your task is to generate an SEO-focused title for a YouTube video based on its transcript. Please follow these guidelines:
 - Be concise but descriptive, using relevant keywords to improve discoverability.
@@ -15,78 +15,70 @@ const TITLE_SYSTEM_PROMPT = `Your task is to generate an SEO-focused title for a
 - Avoid jargon or overly complex language unless it directly supports searchability.
 - Use action-oriented phrasing or clear value propositions where applicable.
 - Ensure the title is 3-8 words long and no more than 100 characters.
-- ONLY return the title as plain text. Do not add quotes or any additional formatting.`;
+- ONLY return the title as plain text. Do not add quotes or any additional formatting.
 
-export const { POST } = serve(
-  async (context) => {
-    const input = context.requestPayload as InputType;
-    const { videoId, userId } = input;
+返回的结果使用中文
+`;
 
-    const video = await context.run("get-video", async () => {
-      const [existingVideo] = await db
-        .select()
-        .from(videos)
-        .where(and(
-          eq(videos.id, videoId),
-          eq(videos.userId, userId),
-        ));
+export const { POST } = serve(async (context) => {
+  const input = context.requestPayload as InputType;
+  const { videoId, userId } = input;
 
-      if (!existingVideo) {
-        throw new Error("Not found");
-      }
+  const video = await context.run("get-video", async () => {
+    const [existingVideo] = await db
+      .select()
+      .from(videos)
+      .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
 
-      return existingVideo;
-    });
+    if (!existingVideo) {
+      throw new Error("Not found");
+    }
 
-    const transcript = await context.run("get-transcript", async () => {
-      const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
-      const response = await fetch(trackUrl);
-      const text = response.text();
+    return existingVideo;
+  });
 
-      if (!text) {
-        throw new Error("Bad request");
-      }
+  const transcript = await context.run("get-transcript", async () => {
+    const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
+    const response = await fetch(trackUrl);
+    const text = response.text();
 
-      return text;
-    })
-
-    const { body } = await context.api.openai.call(
-      "generate-title",
-      {
-        token: process.env.OPENAI_API_KEY!,
-        operation: "chat.completions.create",
-        body: {
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system",
-              content: TITLE_SYSTEM_PROMPT,
-            },
-            {
-              role: "user",
-              content: transcript,
-            }
-          ],
-        },
-      }
-    );
-
-    const title = body.choices[0]?.message.content;
-
-    if (!title) {
+    if (!text) {
       throw new Error("Bad request");
     }
 
-    await context.run("update-video", async () => {
-      await db
-        .update(videos)
-        .set({
-          title: title || video.title,
-        })
-        .where(and(
-          eq(videos.id, video.id),
-          eq(videos.userId, video.userId),
-        ))
-    })
+    return text;
+  });
+
+  const { body } = await context.api.openai.call("generate-title", {
+    token: process.env.OPENAI_API_KEY!,
+    baseURL: process.env.OPENAI_BASE_URL!,
+    operation: "chat.completions.create",
+    body: {
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: TITLE_SYSTEM_PROMPT,
+        },
+        {
+          role: "user",
+          content: transcript,
+        },
+      ],
+    },
+  });
+  const title = body.choices[0]?.message.content;
+
+  if (!title) {
+    throw new Error("Bad request");
   }
-)
+
+  await context.run("update-video", async () => {
+    await db
+      .update(videos)
+      .set({
+        title: title || video.title,
+      })
+      .where(and(eq(videos.id, video.id), eq(videos.userId, video.userId)));
+  });
+});

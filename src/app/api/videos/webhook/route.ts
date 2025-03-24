@@ -1,17 +1,17 @@
-import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
-import { UTApi } from "uploadthing/server";
 import {
   VideoAssetCreatedWebhookEvent,
+  VideoAssetDeletedWebhookEvent,
   VideoAssetErroredWebhookEvent,
   VideoAssetReadyWebhookEvent,
   VideoAssetTrackReadyWebhookEvent,
-  VideoAssetDeletedWebhookEvent,
 } from "@mux/mux-node/resources/webhooks";
+import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { UTApi } from "uploadthing/server";
 
 import { db } from "@/db";
-import { mux } from "@/lib/mux";
 import { videos } from "@/db/schema";
+import { mux } from "@/lib/mux";
 
 const SIGNING_SECRET = process.env.MUX_WEBHOOK_SECRET!;
 
@@ -27,6 +27,9 @@ export const POST = async (request: Request) => {
     throw new Error("MUX_WEBHOOK_SECRET is not set");
   }
 
+  console.log("================================================");
+  console.log(request);
+  console.log("================================================");
   const headersPayload = await headers();
   const muxSignature = headersPayload.get("mux-signature");
 
@@ -42,7 +45,7 @@ export const POST = async (request: Request) => {
     {
       "mux-signature": muxSignature,
     },
-    SIGNING_SECRET,
+    SIGNING_SECRET
   );
 
   switch (payload.type as WebhookEvent["type"]) {
@@ -82,10 +85,7 @@ export const POST = async (request: Request) => {
       const duration = data.duration ? Math.round(data.duration * 1000) : 0;
 
       const utapi = new UTApi();
-      const [
-        uploadedThumbnail,
-        uploadedPreview,
-      ] = await utapi.uploadFilesFromUrl([
+      const [uploadedThumbnail, uploadedPreview] = await utapi.uploadFilesFromUrl([
         tempThumbnailUrl,
         tempPreviewUrl,
       ]);
@@ -138,16 +138,14 @@ export const POST = async (request: Request) => {
 
       console.log("Deleting video: ", { uploadId: data.upload_id });
 
-      await db
-        .delete(videos)
-        .where(eq(videos.muxUploadId, data.upload_id));
+      await db.delete(videos).where(eq(videos.muxUploadId, data.upload_id));
       break;
     }
 
     case "video.asset.track.ready": {
       const data = payload.data as VideoAssetTrackReadyWebhookEvent["data"] & {
         asset_id: string;
-      }
+      };
 
       console.log("Track ready");
 

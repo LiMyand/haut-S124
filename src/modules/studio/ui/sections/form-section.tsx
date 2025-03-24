@@ -135,8 +135,13 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailGenerateModalOpen, setThumbnailGenerateModalOpen] = useState(false);
-
+  console.log("================================================");
+  console.log("================================================");
+  console.log("videoId", videoId);
+  console.log("================================================");
+  console.log("================================================");
   const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId });
+  console.log("video", video);
   const [categories] = trpc.categories.getMany.useSuspenseQuery();
 
   const update = trpc.videos.update.useMutation({
