@@ -15,11 +15,11 @@ export const StudioUploadModal = () => {
   const utils = trpc.useUtils();
   const create = trpc.videos.create.useMutation({
     onSuccess: () => {
-      toast.success("Video created");
+      toast.success("视频上传成功");
       utils.studio.getMany.invalidate();
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("上传失败");
     },
   });
 
@@ -33,7 +33,7 @@ export const StudioUploadModal = () => {
   return (
     <>
       <ResponsiveModal
-        title="Upload a video"
+        title="上传视频"
         open={!!create.data?.url}
         onOpenChange={() => create.reset()}
       >
@@ -45,7 +45,7 @@ export const StudioUploadModal = () => {
       </ResponsiveModal>
       <Button variant="secondary" onClick={() => create.mutate()} disabled={create.isPending}>
         {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-        Create
+        上传视频
       </Button>
     </>
   );

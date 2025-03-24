@@ -37,12 +37,12 @@ export const PlaylistCreateModal = ({ open, onOpenChange }: PlaylistCreateModalP
   const create = trpc.playlists.create.useMutation({
     onSuccess: () => {
       utils.playlists.getMany.invalidate();
-      toast.success("Playlist created");
+      toast.success("播放列表创建成功");
       form.reset();
       onOpenChange(false);
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("创建失败");
     },
   });
 
@@ -51,7 +51,7 @@ export const PlaylistCreateModal = ({ open, onOpenChange }: PlaylistCreateModalP
   };
 
   return (
-    <ResponsiveModal title="Create a playlist" open={open} onOpenChange={onOpenChange}>
+    <ResponsiveModal title="创建播放列表" open={open} onOpenChange={onOpenChange}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
@@ -59,9 +59,9 @@ export const PlaylistCreateModal = ({ open, onOpenChange }: PlaylistCreateModalP
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Prompt</FormLabel>
+                <FormLabel>名称</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="My favorite videos" />
+                  <Input {...field} placeholder="我的最爱视频" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,7 +69,7 @@ export const PlaylistCreateModal = ({ open, onOpenChange }: PlaylistCreateModalP
           />
           <div className="flex justify-end">
             <Button disabled={create.isPending} type="submit">
-              Create
+              创建
             </Button>
           </div>
         </form>
